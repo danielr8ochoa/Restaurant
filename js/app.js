@@ -36,10 +36,14 @@ function guardarCliente() {
             }, 3000);
         }
         return;
-    } 
+    }
     //Asigar datos del formulario a cliente
-    cliente = {...cliente, mesa, hora}
-    
+    cliente = {
+        ...cliente,
+        mesa,
+        hora
+    }
+
     //Ocultar modal
     const modalFormulario = document.querySelector('#formulario');
     const modalBootstrap = bootstrap.Modal.getInstance(modalFormulario);
@@ -57,18 +61,18 @@ function mostrarSecciones() {
     seccionesOcultas.forEach(seccion => seccion.classList.remove('d-none'));
 }
 
-function obtenerPlatillos(){
+function obtenerPlatillos() {
     const url = "http://localhost:4000/platillos";
 
     fetch(url)
-        .then( respuesta => respuesta.json() )
-        .then( resultado => mostrarPlatillos(resultado) )
+        .then(respuesta => respuesta.json())
+        .then(resultado => mostrarPlatillos(resultado))
         .catch(error => console.log(error))
 }
 
 function mostrarPlatillos(platillos) {
     const contenido = document.querySelector('#platillos .contenido');
-    platillos.forEach( platillo => {
+    platillos.forEach(platillo => {
         const row = document.createElement('div');
         row.classList.add('row', 'py-3', 'border-top');
 
@@ -98,7 +102,10 @@ function mostrarPlatillos(platillos) {
         // Función que detecta la cantidad y el platillo que se está agregando
         inputCantidad.onchange = function () {
             const cantidad = parseInt(inputCantidad.value);
-            agregarPlatillo({...platillo, cantidad});
+            agregarPlatillo({
+                ...platillo,
+                cantidad
+            });
         }
 
         row.appendChild(nombre);
@@ -107,24 +114,37 @@ function mostrarPlatillos(platillos) {
         row.appendChild(agregar);
 
         contenido.appendChild(row);
-    } )
+    })
 }
 
 function agregarPlatillo(producto) {
     //Extraer el pedido actual
-    let { pedido } = cliente;
+    let {
+        pedido
+    } = cliente;
     //Revisar que la cantidad sea mayor a 0
-    if(producto.cantidad > 0) {
+    if (producto.cantidad > 0) {
 
         //Comprueba si el elemento ya existe en el array
-        if( pedido.some( articulo => articulo.id === producto.id)){
+        if (pedido.some(articulo => articulo.id === producto.id)) {
+            //El articulo ya existe, actualizar la cantidad
+            const pedidoActualizado = pedido.map( articulo => {
+                if (articulo.id === producto.id ) {
+                    articulo.cantidad = producto.cantidad;
+                }
+                return articulo;
+            });
+            //Se asigna el nuevo array al cliente.pedido
 
+            cliente.pedido = [...pedidoActualizado]
+        } else {
+            //El articulo no existe, lo agregamos al array de pedido
+            cliente.pedido = [...pedido, producto];
         }
 
-        cliente.pedido = [...pedido, producto];
 
     } else {
         console.log('No es mayor a 0');
-    } 
+    }
     console.log(cliente.pedido);
 }
