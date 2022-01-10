@@ -405,22 +405,76 @@ function formularioPropinas() {
 
 function calcularPropina() {
 
-    const { pedido } = cliente;
+    const {
+        pedido
+    } = cliente;
     let subtotal = 0;
 
     // Calcular subtotal al pagar
-    pedido.forEach( articulo => {
+    pedido.forEach(articulo => {
         subtotal += articulo.cantidad * articulo.precio;
     })
 
     // Seleccionar el RadioButton con la propina del cliente
     const propinaSeleccionada = document.querySelector('[name="propina"]:checked').value;
-    
+
     // Calcular la propina
-    const propina = ((subtotal * parseInt( propinaSeleccionada )) / 100)
+    const propina = ((subtotal * parseInt(propinaSeleccionada)) / 100)
 
     // Calcular el total a pagar
     const total = subtotal + propina;
 
-    console.log(total);
+    mostrarTotalHTML(subtotal, total, propina);
+}
+
+function mostrarTotalHTML(subtotal, total, propina) {
+
+    const divTotales = document.createElement('div');
+    divTotales.classList.add('total-pagar');
+
+    //Subtotal
+    const subtotalParrafo = document.createElement('p');
+    subtotalParrafo.classList.add('fs-3', 'fw-bold', 'mt-2');
+    subtotalParrafo.textContent = 'Subtotal: ';
+
+    const subtotalSpan = document.createElement('span');
+    subtotalSpan.classList.add('fw-normal');
+    subtotalSpan.textContent = `$${subtotal}`;
+
+    subtotalParrafo.appendChild(subtotalSpan);
+
+    // Propina
+    const propinaParrafo = document.createElement('p');
+    propinaParrafo.classList.add('fs-3', 'fw-bold', 'mt-2');
+    propinaParrafo.textContent = 'Propina: ';
+
+    const propinaSpan = document.createElement('span');
+    propinaSpan.classList.add('fw-normal');
+    propinaSpan.textContent = `$${propina}`;
+
+    propinaParrafo.appendChild(propinaSpan);
+
+
+    // Total
+    const totalParrafo = document.createElement('p');
+    totalParrafo.classList.add('fs-3', 'fw-bold', 'mt-2');
+    totalParrafo.textContent = 'Total a pagar: ';
+
+    const totalSpan = document.createElement('span');
+    totalSpan.classList.add('fw-normal');
+    totalSpan.textContent = `$${total}`;
+
+    totalParrafo.appendChild(totalSpan);
+
+    // Eliminar el último resultado
+    const totalPagarDiv = document.querySelector('.total-pagar');
+    if (totalPagarDiv) {
+        totalPagarDiv.remove();
+    }
+    divTotales.appendChild(subtotalParrafo);
+    divTotales.appendChild(propinaParrafo);
+    divTotales.appendChild(totalParrafo);
+
+    const formulario = document.querySelector('.formulario > div');
+    formulario.appendChild(divTotales);
 }
