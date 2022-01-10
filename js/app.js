@@ -164,7 +164,7 @@ function actualizarResumen() {
     const contenido = document.querySelector('#resumen .contenido')
 
     const resumen = document.createElement('div');
-    resumen.classList.add('col-md-6', 'card', 'py-5', 'px-3', 'shadow');
+    resumen.classList.add('col-md-6', 'card', 'py-2', 'px-3', 'shadow');
 
     //Informacion de la mesa
     const mesa = document.createElement('p');
@@ -267,12 +267,15 @@ function actualizarResumen() {
     })
 
     // Agregar a contenido
+    resumen.appendChild(heading);
     resumen.appendChild(mesa);
     resumen.appendChild(hora);
-    resumen.appendChild(heading);
     resumen.appendChild(grupo);
 
     contenido.appendChild(resumen);
+
+    // Mostrar formulario de propinas
+    formularioPropinas();
 }
 
 function limpiarHTML() {
@@ -296,7 +299,7 @@ function eliminarProducto(id) {
 
     //Limpiar el HTML previo
     limpiarHTML();
-    
+
     if (cliente.pedido.length) {
         // Mostrar el resumen
         actualizarResumen();
@@ -318,4 +321,81 @@ function mensajePedidoVacio() {
     texto.textContent = 'Añade los elementos del pedido';
 
     contenido.appendChild(texto);
+}
+
+function formularioPropinas() {
+    const contenido = document.querySelector('#resumen .contenido');
+
+    const formulario = document.createElement('div');
+    formulario.classList.add('col-md-6', 'formulario');
+
+    const divFormulario = document.createElement('div');
+    divFormulario.classList.add('card', 'py-2', 'px-3', 'shadow');
+
+    const heading = document.createElement('h3');
+    heading.classList.add('my-4', 'text-center');
+    heading.textContent = 'Propina';
+
+    // Radio button 10%
+    const radio10 = document.createElement('input')
+    radio10.type = 'radio';
+    radio10.name = 'propina';
+    radio10.value = "10";
+    radio10.classList.add('form-check-input');
+
+    const radio10Label = document.createElement('label');
+    radio10Label.textContent = '10%';
+    radio10Label.classList.add('form-check-label');
+
+    const radio10Div = document.createElement('div');
+    radio10Div.classList.add('form-check');
+
+    radio10Div.appendChild(radio10);
+    radio10Div.appendChild(radio10Label);
+
+    // Radio button 15%
+    const radio15 = document.createElement('input')
+    radio15.type = 'radio';
+    radio15.name = 'propina';
+    radio15.value = "15";
+    radio15.classList.add('form-check-input');
+
+    const radio15Label = document.createElement('label');
+    radio15Label.textContent = '15%';
+    radio15Label.classList.add('form-check-label');
+
+    const radio15Div = document.createElement('div');
+    radio15Div.classList.add('form-check');
+
+    radio15Div.appendChild(radio15);
+    radio15Div.appendChild(radio15Label);
+
+    // Radio button 20%
+    const radio20 = document.createElement('input')
+    radio20.type = 'radio';
+    radio20.name = 'propina';
+    radio20.value = "20";
+    radio20.classList.add('form-check-input');
+
+    const radio20Label = document.createElement('label');
+    radio20Label.textContent = '20%';
+    radio20Label.classList.add('form-check-label');
+
+    const radio20Div = document.createElement('div');
+    radio20Div.classList.add('form-check');
+
+    radio20Div.appendChild(radio20);
+    radio20Div.appendChild(radio20Label);
+
+    // Agregar al div principal
+    divFormulario.appendChild(heading);
+    divFormulario.appendChild(radio10Div);
+    divFormulario.appendChild(radio15Div);
+    divFormulario.appendChild(radio20Div);
+
+
+    // Agregar al formulario
+    formulario.appendChild(divFormulario);
+
+    contenido.appendChild(formulario);
 }
